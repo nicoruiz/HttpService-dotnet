@@ -21,7 +21,7 @@ namespace HttpService_dotnet.services
             var productBody = JsonConvert.SerializeObject(product);
             var headers = new Dictionary<string, string>() { { "Accept", "application/json" } }; // No headers needed, added just for testing purposes.
 
-            var response = await _httpService.SendRequestAsync<Product>("POST", "products/add", body: productBody, headers: headers);
+            var response = await _httpService.SendRequestAsync<Product>("POST", "products/add", headers: headers, body: productBody);
 
             return response.Id;
         }
