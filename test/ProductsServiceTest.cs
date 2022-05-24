@@ -31,7 +31,7 @@ namespace httpclientrequest_test
         [Fact]
         public async void SearchProductWithQueryPhone_ReturnsAListWith4Products()
         {
-            var response = await _productsService.SearchProducts("phone");
+            var response = await _productsService.SearchProducts("q=phone");
             Assert.Equal(4, response.Count);
         }
     }

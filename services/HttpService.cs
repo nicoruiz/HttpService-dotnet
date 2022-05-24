@@ -17,18 +17,18 @@ namespace httpclientrequest_test
             this._baseUrl = baseUrl;
         }
 
-        public async Task<string> SendRequestAsync(string method, string action, string args, string body)
+        public async Task<string> SendRequestAsync(string method, string action, string queryParams = null, string body = null)
         {
             try {
-                if (args != null && args.Length > 0)
-                    args = $"?{args}";
+                if (queryParams != null && queryParams.Length > 0)
+                    queryParams = $"?{queryParams}";
 
                 using (var client = new HttpClient()) 
                 {
                     client.BaseAddress = new Uri(_baseUrl);
 
                     var requestMessage = new HttpRequestMessage();
-                    requestMessage.RequestUri = new Uri(client.BaseAddress, $"{action}{args}");
+                    requestMessage.RequestUri = new Uri(client.BaseAddress, $"{action}{queryParams}");
                     requestMessage.Method = new HttpMethod(method);
                     requestMessage.Content = new StringContent(body != null ? body : String.Empty, Encoding.UTF8, MediaTypeNames.Application.Json);
 
