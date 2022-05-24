@@ -1,4 +1,4 @@
-namespace httpclientrequest_test
+namespace HttpService_dotnet.models
 {
     public class Product
     {
@@ -7,5 +7,6 @@ namespace httpclientrequest_test
         public string Description { get; set; }
         public double Price { get; set; }
         public double Rating { get; set; }
+        public string Category { get; set; }
     }
 }

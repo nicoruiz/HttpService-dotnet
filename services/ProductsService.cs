@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using HttpService_dotnet.models;
 
-namespace httpclientrequest_test
+namespace HttpService_dotnet.services
 {
     public class ProductsService
     {
@@ -18,38 +18,30 @@ namespace httpclientrequest_test
         public async Task<int> AddProduct(string productName)
         {
             var product = new Product { Title = productName };
-
             var productBody = JsonConvert.SerializeObject(product);
-            var response = await _httpService.SendRequestAsync("POST", "products/add", body: productBody);
+            var headers = new Dictionary<string, string>() { { "Accept", "application/json" } }; // No headers needed, added just for testing purposes.
 
-            var productId = JsonConvert.DeserializeObject<Product>(response).Id;
+            var response = await _httpService.SendRequestAsync<Product>("POST", "products/add", body: productBody, headers: headers);
 
-            return productId;
+            return response.Id;
         }
 
         public async Task<ICollection<Product>> GetAllProducts() {
-            var response = await _httpService.SendRequestAsync("GET", "products");
-            var jsonResponse = JObject.Parse(response);
+            var response = await _httpService.SendRequestAsync<ProductsApiResponse>("GET", "products");
 
-            var products = JsonConvert.DeserializeObject<ICollection<Product>>(jsonResponse.SelectToken("products").ToString());
-
-            return products;
+            return response.Products;
         }
 
         public async Task<Product> GetProductById(int id) {
-            var response = await _httpService.SendRequestAsync("GET", $"products/{id}");
-            var product = JsonConvert.DeserializeObject<Product>(response);
+            var response = await _httpService.SendRequestAsync<Product>("GET", $"products/{id}");
 
-            return product;
+            return response;
         }
 
         public async Task<ICollection<Product>> SearchProducts(string queryParams) {
-            var response = await _httpService.SendRequestAsync("GET", "products/search", queryParams);
-            var jsonResponse = JObject.Parse(response);
+            var response = await _httpService.SendRequestAsync<ProductsApiResponse>("GET", "products/search", queryParams: queryParams);
 
-            var products = JsonConvert.DeserializeObject<ICollection<Product>>(jsonResponse.SelectToken("products").ToString());
-
-            return products;
+            return response.Products;
         }
     }
 }
