@@ -1,3 +1,5 @@
+using System;
+using System.Net;
 using Xunit;
 using HttpService_dotnet.services;
 
@@ -15,10 +17,10 @@ namespace httpclientrequest_test
         }
 
         [Fact]
-        public async void GetAllProducts_ReturnsAListWith30Products()
+        public async void GetAllProducts_Returns100Products()
         {
             var response = await _productsService.GetAllProducts();
-            Assert.Equal(30, response.Count);
+            Assert.Equal(100, response.Total);
         }
 
         [Fact]
@@ -30,10 +32,10 @@ namespace httpclientrequest_test
         }
 
         [Fact]
-        public async void SearchProductWithQueryPhone_ReturnsAListWith4Products()
+        public async void SearchProductWithQueryPhone_Returns4Products()
         {
             var response = await _productsService.SearchProducts("q=phone");
-            Assert.Equal(4, response.Count);
+            Assert.Equal(4, response.Total);
         }
     }
 }

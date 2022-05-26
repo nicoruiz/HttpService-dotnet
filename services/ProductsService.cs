@@ -26,10 +26,10 @@ namespace HttpService_dotnet.services
             return response.Id;
         }
 
-        public async Task<ICollection<Product>> GetAllProducts() {
+        public async Task<ProductsApiResponse> GetAllProducts() {
             var response = await _httpService.SendRequestAsync<ProductsApiResponse>("GET", "products");
 
-            return response.Products;
+            return response;
         }
 
         public async Task<Product> GetProductById(int id) {
@@ -38,10 +38,10 @@ namespace HttpService_dotnet.services
             return response;
         }
 
-        public async Task<ICollection<Product>> SearchProducts(string queryParams) {
+        public async Task<ProductsApiResponse> SearchProducts(string queryParams) {
             var response = await _httpService.SendRequestAsync<ProductsApiResponse>("GET", "products/search", queryParams: queryParams);
 
-            return response.Products;
+            return response;
         }
     }
 }
