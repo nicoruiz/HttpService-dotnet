@@ -10,9 +10,10 @@ namespace HttpService_dotnet.services
         private const string BASE_URL = "https://dummyjson.com/";
         private HttpService _httpService { get; set; }
 
-        public ProductsService() 
+        public ProductsService(HttpService httpService) 
         {
-            this._httpService = new HttpService(BASE_URL);
+            this._httpService = httpService;
+            this._httpService.SetBaseUrl(BASE_URL);
         }
 
         public async Task<int> AddProduct(string productName)

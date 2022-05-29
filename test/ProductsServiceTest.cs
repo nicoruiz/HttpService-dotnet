@@ -1,5 +1,3 @@
-using System;
-using System.Net;
 using Xunit;
 using HttpService_dotnet.services;
 
@@ -7,7 +5,9 @@ namespace httpclientrequest_test
 {
     public class ProductsServiceTest
     {
-        private ProductsService _productsService = new ProductsService();
+        // Simulates DI Container.
+        private static HttpService _httpService = new HttpService();
+        private ProductsService _productsService = new ProductsService(_httpService);
 
         [Fact]
         public async void AddNewProduct_ReturnsId101FromNewProductCreated()

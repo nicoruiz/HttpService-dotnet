@@ -10,10 +10,10 @@ namespace HttpService_dotnet.services
 {
     public class HttpService
     {
+        private static HttpClient _client = new HttpClient();
         private string _baseUrl { get; set; }
 
-        public HttpService(string baseUrl) 
-        {
+        public void SetBaseUrl(string baseUrl) {
             this._baseUrl = baseUrl;
         }
 
@@ -38,28 +38,24 @@ namespace HttpService_dotnet.services
                 if (queryParams != null && queryParams.Length > 0)
                     queryParams = $"?{queryParams}";
 
-                using (var client = new HttpClient()) 
-                {
-                    client.BaseAddress = new Uri(_baseUrl);
-
-                    var requestMessage = new HttpRequestMessage();
-                    requestMessage.RequestUri = new Uri(client.BaseAddress, $"{action}{queryParams}");
-                    if (headers != null) {
-                        foreach (var item in headers)
-                        {
-                            requestMessage.Headers.Add(item.Key, item.Value);
-                        }
+                var requestMessage = new HttpRequestMessage();
+                requestMessage.RequestUri = new Uri(new Uri(_baseUrl), $"{action}{queryParams}");
+                if (headers != null) {
+                    foreach (var item in headers)
+                    {
+                        requestMessage.Headers.Add(item.Key, item.Value);
                     }
-                    requestMessage.Method = new HttpMethod(method);
-                    requestMessage.Content = new StringContent(body != null ? body : String.Empty, Encoding.UTF8, MediaTypeNames.Application.Json);
-
-                    var response = await client.SendAsync(requestMessage);
-                    var data = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"HTTP Status Response: {response.StatusCode.ToString()}");
-                    Console.WriteLine($"Response data: {data}");
-
-                    return data;
                 }
+                requestMessage.Method = new HttpMethod(method);
+                requestMessage.Content = new StringContent(body != null ? body : String.Empty, Encoding.UTF8, MediaTypeNames.Application.Json);
+
+                var response = await _client.SendAsync(requestMessage);
+                var data = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"HTTP Status Response: {response.StatusCode.ToString()}");
+                Console.WriteLine($"Response data: {data}");
+                
+                return data;
             }
             catch(System.Exception ex)
             {
